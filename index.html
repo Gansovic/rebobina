@@ -1880,6 +1880,10 @@ requestAnimationFrame(frame);
 
 <script>
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  // When a new version takes over, reload once so you see it straight away (not on the first install)
+  const hadWorker = !!navigator.serviceWorker.controller;
+  let reloading = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => { if (hadWorker && !reloading) { reloading = true; location.reload(); } });
   addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 }
 </script>
