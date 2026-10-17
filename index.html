@@ -94,13 +94,13 @@ button{font:inherit; color:inherit}
 
 /* Screens sit on the arena itself (same square as the canvas). No cards: big thin type and round buttons in the game's own shapes. */
 .overlay{position:absolute; inset:0; display:grid; place-items:center; pointer-events:none}
-.scene{--d:clamp(62px, calc(var(--arena) * .19), 118px); position:relative; width:var(--arena); height:var(--arena); border-radius:22px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:clamp(12px, calc(var(--arena) * .04), 24px); padding:6%; text-align:center; pointer-events:auto; animation:sceneIn .3s ease-out}
+.scene{--d:clamp(62px, calc(var(--arena) * .19), 118px); position:relative; width:var(--arena-w); height:var(--arena-h); border-radius:22px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:clamp(12px, calc(var(--arena) * .04), 24px); padding:6%; text-align:center; pointer-events:auto; animation:sceneIn .3s ease-out}
 .scene.veil{background:#f7f8fb}
 .scene.menu{display:block; padding:0; pointer-events:none}
 .scene.menu::before{content:""; position:absolute; inset:0; border-radius:inherit; background:radial-gradient(ellipse 72% 62% at 50% 46%, rgba(248,249,252,.7), rgba(248,249,252,.1)); transition:opacity .3s}
 @keyframes sceneIn{from{opacity:0}}
 
-.title{position:absolute; left:0; right:0; top:14%; margin:0; font-weight:200; font-size:calc(var(--arena) * .16); line-height:1; letter-spacing:.005em; isolation:isolate; transition:opacity .25s}
+.title{position:absolute; left:0; right:0; top:calc((84 + var(--oy)) * 100% / var(--ah)); margin:0; font-weight:200; font-size:calc(var(--arena) * .16); line-height:1; letter-spacing:.005em; isolation:isolate; transition:opacity .25s}
 .title::before{content:attr(data-echo); position:absolute; inset:0; z-index:-1; color:var(--teal); animation:echo 3.6s cubic-bezier(.55,0,.25,1) infinite}
 @keyframes echo{0%{transform:none; opacity:0} 10%{opacity:.32} 72%{transform:translateX(-.2em); opacity:.32} 78%{transform:none; opacity:.6} 100%{transform:none; opacity:0}}
 .stitle{margin:0; font-weight:200; font-size:clamp(32px, calc(var(--arena) * .09), 56px); line-height:1; letter-spacing:.01em; transition:opacity .25s}
@@ -121,8 +121,8 @@ button{font:inherit; color:inherit}
 .orb-btn.small{--d:clamp(48px, calc(var(--arena) * .12), 72px); width:auto; min-width:84px}
 .orb-btn.outline .orb{background:transparent; color:var(--ink); box-shadow:inset 0 0 0 1.5px var(--line)}
 .orb-btn.outline .orb::after{border-color:var(--muted)}
-/* Menu: the three modes float on the arena at fixed arena coordinates (--x, --y out of 600) */
-.orb-btn.at{position:absolute; left:calc(var(--x) * 100% / 600); top:calc(var(--y) * 100% / 600); translate:-50% calc(var(--d) / -2); animation:bob 4.2s ease-in-out infinite}
+/* Menu: the three modes float on the arena at design coordinates (--x, --y in the centred 600×600 box) */
+.orb-btn.at{position:absolute; left:calc((var(--x) + var(--ox)) * 100% / var(--aw)); top:calc((var(--y) + var(--oy)) * 100% / var(--ah)); translate:-50% calc(var(--d) / -2); animation:bob 4.2s ease-in-out infinite}
 .orb-btn.at:nth-of-type(2){animation-delay:-1.4s} .orb-btn.at:nth-of-type(3){animation-delay:-2.8s}
 @keyframes bob{50%{transform:translateY(-5px)}}
 .orb-btn:disabled{cursor:default} .orb-btn:disabled .orb{transform:none}
@@ -162,14 +162,14 @@ button{font:inherit; color:inherit}
 
 /* Map: a metro line, one stop per level, boss at the end */
 .scene.free{display:block; padding:0}
-.chap{position:absolute; top:7%; left:0; right:0; display:flex; justify-content:center; align-items:center; gap:16px}
+.chap{position:absolute; top:calc((42 + var(--oy)) * 100% / var(--ah)); left:0; right:0; display:flex; justify-content:center; align-items:center; gap:16px}
 .chev{width:38px; height:38px; flex:none; border-radius:50%; border:1px solid var(--line); background:var(--card); color:var(--ink); display:grid; place-items:center; cursor:pointer; padding:0}
 .chev svg{width:16px; height:16px}
 .line{position:absolute; inset:0; width:100%; height:100%; pointer-events:none}
 .line polyline{fill:none; stroke-linecap:round; stroke-linejoin:round}
 .line .todo{stroke:var(--line); stroke-width:6}
 .line .done{stroke:var(--teal); stroke-width:9}
-.stop{--s:clamp(30px, calc(var(--arena) * .085), 52px); position:absolute; left:calc(var(--x) * 100% / 600); top:calc(var(--y) * 100% / 600); translate:-50% -50%; appearance:none; border:0; background:none; padding:0; margin:0; font:inherit; cursor:pointer; -webkit-tap-highlight-color:transparent}
+.stop{--s:clamp(30px, calc(var(--arena) * .085), 52px); position:absolute; left:calc((var(--x) + var(--ox)) * 100% / var(--aw)); top:calc((var(--y) + var(--oy)) * 100% / var(--ah)); translate:-50% -50%; appearance:none; border:0; background:none; padding:0; margin:0; font:inherit; cursor:pointer; -webkit-tap-highlight-color:transparent}
 .stop .dot{width:var(--s); height:var(--s); border-radius:50%; display:grid; place-items:center; font-weight:600; font-size:calc(var(--s) * .36); font-variant-numeric:tabular-nums; background:var(--teal); color:#fff; transition:transform .2s cubic-bezier(.3,1.5,.5,1)}
 .stop:hover .dot{transform:scale(1.08)}
 .stop.now .dot{background:#fff; color:var(--ink); transform:scale(1.14); box-shadow:inset 0 0 0 calc(var(--s) * .1) var(--teal); animation:halo 1.8s ease-out infinite}
@@ -283,7 +283,11 @@ button{font:inherit; color:inherit}
 
 <script>
 /* ---------- Constants ---------- */
-const W = 600, H = 600;
+// The arena fills the screen: the short side is always 600 units, the long side grows with the screen (up to MAX_RATIO).
+// Menus and walls are laid out in a 600×600 design box centred in it (OX, OY are its offsets).
+let W = 600, H = 600;
+const MAX_RATIO = 2.2;
+const OX = () => (W - 600) / 2, OY = () => (H - 600) / 2;
 const BASE_DELAY = 2.5;   // seconds your echo trails behind you
 const BASE_BLAST = 80;    // explosion radius when you land
 const BASE_ZIP = 15;      // half-width of the lane you sweep when you zip back
@@ -393,7 +397,7 @@ function newState(mode, level){
   grng = mode === 'daily' ? seedRng(hashStr('rebobina-' + todayKey())) : def ? seedRng(hashStr('nivel-run-' + level)) : Math.random;
   return {
     mode, level: level || 0, def, phase: 'menu', t: 0, rec: [], recT: 0, ghost: null, ghostFx: [], day: todayKey(),
-    round: def ? def.diff : 1, roundKills: 0, roundT: 0, pool: def ? def.pool : poolForRound(1), walls: def ? def.walls : [],
+    round: def ? def.diff : 1, roundKills: 0, roundT: 0, pool: def ? def.pool : poolForRound(1), walls: def ? def.walls.map(w => ({ ...w, x: w.x + OX(), y: w.y + OY() })) : [],
     p: { x: W / 2, y: H * 0.62 }, target: null, keys: {},
     hist: [], hearts: 3, armor: 0, inv: 0, kills: 0, bestCombo: 0, mods: {},
     enemies: [], bullets: [], warns: [], chains: [], rings: [], parts: [], texts: [], ghosts: [], pending: [],
@@ -841,12 +845,17 @@ const cv = $('#game'), ctx = cv.getContext('2d');
 let scale = 1, dpr = 1, bg = null;
 function fitCanvas(){
   const st = $('#stage');
-  const size = Math.max(220, Math.floor(Math.min(st.clientWidth, st.clientHeight) - 16));
+  let pw = Math.max(220, st.clientWidth - 16), ph = Math.max(220, st.clientHeight - 16);
+  if (pw >= ph) { pw = Math.min(pw, ph * MAX_RATIO); H = 600; W = Math.round(600 * pw / ph); scale = ph / 600; }
+  else { ph = Math.min(ph, pw * MAX_RATIO); W = 600; H = Math.round(600 * ph / pw); scale = pw / 600; }
+  pw = W * scale; ph = H * scale;
   dpr = Math.min(2, window.devicePixelRatio || 1);
-  cv.style.width = cv.style.height = size + 'px';
-  cv.width = cv.height = Math.round(size * dpr);
-  scale = size / W;
-  st.style.setProperty('--arena', size + 'px');
+  cv.style.width = pw + 'px'; cv.style.height = ph + 'px';
+  cv.width = Math.round(pw * dpr); cv.height = Math.round(ph * dpr);
+  const s = st.style;
+  s.setProperty('--arena', Math.min(pw, ph) + 'px');
+  s.setProperty('--arena-w', pw + 'px'); s.setProperty('--arena-h', ph + 'px');
+  s.setProperty('--aw', W); s.setProperty('--ah', H); s.setProperty('--ox', OX()); s.setProperty('--oy', OY());
   buildBg();
 }
 function buildBg(){
@@ -1104,8 +1113,8 @@ function render(){
   if (S.rewind) { ctx.fillStyle = rgba(C.teal, .05); ctx.fillRect(0, 0, W, H); }
   if (S.boss && !S.boss.dead && S.phase === 'play') {
     const k = Math.max(0, S.boss.hp / S.boss.maxHp);
-    ctx.fillStyle = 'rgba(31,42,60,.1)'; rrect(200, 20, 200, 6, 3); ctx.fill();
-    ctx.fillStyle = C.boss; rrect(200, 20, 200 * k, 6, 3); ctx.fill();
+    ctx.fillStyle = 'rgba(31,42,60,.1)'; rrect(W / 2 - 100, 20, 200, 6, 3); ctx.fill();
+    ctx.fillStyle = C.boss; rrect(W / 2 - 100, 20, 200 * k, 6, 3); ctx.fill();
   }
   if (S.banner) {
     const b = S.banner, k = b.t / b.life, alpha = k < .15 ? k / .15 : k > .75 ? (1 - k) / .25 : 1;
@@ -1563,7 +1572,7 @@ function toMenu(then){
 }
 function demoPath(t){
   const a = t * 0.42 - 1.2, k = 1 + 0.05 * Math.sin(a * 3);
-  return { x: 300 + 268 * k * Math.cos(a), y: 300 + 236 * k * Math.sin(a) };
+  return { x: W / 2 + (W / 2 - 32) * k * Math.cos(a), y: H / 2 + (H / 2 - 64) * k * Math.sin(a) };
 }
 function demoEdge(){
   let pt;
@@ -1641,7 +1650,8 @@ function pickMode(id){
   audio(); startMusic();
   D.pick = id; D.pickT = 0; D.loud = Infinity;
   const from = { x: S.p.x, y: S.p.y }, path = [];
-  for (let i = 0; i <= 10; i++) path.push({ x: lerp(from.x, m.x, i / 10), y: lerp(from.y, m.y, i / 10) });
+  const tx = m.x + OX(), ty = m.y + OY();
+  for (let i = 0; i <= 10; i++) path.push({ x: lerp(from.x, tx, i / 10), y: lerp(from.y, ty, i / 10) });
   S.rewindSeq = (S.rewindSeq || 0) + 1;
   S.rewind = { path, k: 0, id: S.rewindSeq, last: from };
   startCombo(from.x, from.y);
